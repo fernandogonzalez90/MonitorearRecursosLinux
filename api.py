@@ -1,12 +1,15 @@
+import os
+import platform
 from fastapi import FastAPI
 from pydantic import BaseModel
 import psutil
-import platform
+from typing import Any
+
 
 app = FastAPI()
 
 class SystemInfo(BaseModel):
-    processor_info: str
+    processor_info: Any
     ram_total: float
     ram_used_percent: float
     disk_total: float
@@ -14,38 +17,46 @@ class SystemInfo(BaseModel):
 
 @app.get("/get_system_info")
 def get_system_info():
-    # Obtener información del sistema
-    processor_info = platform.processor()
-    
-    # Información de RAM
-    ram_info = psutil.virtual_memory()
-    ram_total_gb = round(ram_info.total / (1024 ** 3), 1)
-    ram_used_percent = round(ram_info.percent, 1)
+    try:
+        # Obtener información del sistema
+        if os.name == 'nt':  # Windows
+            processor_info = platform.processor()
+        else:  # Unix-like
+            num_cores = psutil.cpu_count()
+            cpu_usage = psutil.cpu_percent(interval=1, percpu=True)
+            processor_info = f'{num_cores} cores     {cpu_usage}%'
 
-    # Información del disco
-    disk_info = psutil.disk_usage('/')
-    disk_total_gb = round(disk_info.total / (1024 ** 3), 1)
-    disk_used_percent = round(disk_info.percent, 1)
+        # Información de RAM
+        ram_info = psutil.virtual_memory()
+        ram_total_gb = round(ram_info.total / (1024 ** 3), 1)
+        ram_used_percent = round(ram_info.percent, 1)
 
-    # Construir la respuesta
-    system_info = SystemInfo(
-        processor_info=processor_info,
-        ram_total=ram_total_gb,
-        ram_used_percent=ram_used_percent,
-        disk_total=disk_total_gb,
-        disk_used_percent=disk_used_percent
-    )
+        # Información del disco
+        disk_info = psutil.disk_usage('/')
+        disk_total_gb = round(disk_info.total / (1024 ** 3), 1)
+        disk_used_percent = round(disk_info.percent, 1)
 
-    # Formatear la respuesta
-    formatted_response = {
-        "Processor Info": system_info.processor_info,
-        "RAM Total (GB)": system_info.ram_total,
-        "RAM Used Percentage": system_info.ram_used_percent,
-        "Disk Total (GB)": system_info.disk_total,
-        "Disk Used Percentage": system_info.disk_used_percent
-    }
+        # Construir la respuesta
+        system_info = SystemInfo(
+            processor_info=processor_info,
+            ram_total=ram_total_gb,
+            ram_used_percent=ram_used_percent,
+            disk_total=disk_total_gb,
+            disk_used_percent=disk_used_percent
+        )
 
-    return formatted_response
+        # Formatear la respuesta
+        formatted_response = {
+            "Processor Info": system_info.processor_info,
+            "RAM Total (GB)": system_info.ram_total,
+            "RAM Used Percentage": system_info.ram_used_percent,
+            "Disk Total (GB)": system_info.disk_total,
+            "Disk Used Percentage": system_info.disk_used_percent
+        }
+
+        return formatted_response
+    except Exception as e:
+        return {"error": f"Error al obtener información del sistema: {str(e)}"}
 
 if __name__ == '__main__':
     import uvicorn
