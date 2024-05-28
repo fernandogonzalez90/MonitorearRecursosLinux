@@ -40,9 +40,8 @@ pipeline{
         //     }
         // }
     }
-}
 
-post{
+    post{
     always {
         echo "Limpiando"
         sh "docker system prune -f"
@@ -55,3 +54,5 @@ post{
         echo "Fail !"
     }
 }
+}
+
