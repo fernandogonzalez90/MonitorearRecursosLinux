@@ -5,7 +5,7 @@ pipeline{
         DOCKER_CREDENTIALS_ID = credentials("docker")
         IMAGE_NAME = 'firthunands90/montinorearrecursoslinux'
         GIT_REPO = 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
-        GIT_BRANCH = 'master'
+        GIT_BRANCH = 'main'
     }
 
     stages{
