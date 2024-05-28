@@ -2,9 +2,9 @@ pipeline{
     agent any
 
     environment {
-        DOCKER_CREDENTIALS_ID = credentials("dockerhub")
-        IMAGE_NAME = 'firthunands90/calcudolar'
-        GIT_REPO = 'https://github.com/fernandogonzalez90/Calcudolar.git'
+        DOCKER_CREDENTIALS_ID = credentials("docker")
+        IMAGE_NAME = 'firthunands90/montinorearrecursoslinux'
+        GIT_REPO = 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
         GIT_BRANCH = 'master'
     }
 
@@ -14,28 +14,18 @@ pipeline{
                 git branch: "${env.GIT_BRANCH}", url:"${env.GIT_REPO}"
             }
         }
-        
-        stage('Instalar Dependencias'){
-            steps{
-                sh 'npm install'
-            }
-        }
-
-        stage('Build'){
-            steps{
-                sh 'npm run build'
-            }
-        }
 
         stage('Build Docker Image'){
             steps{
                 script {
                     writeFile file: 'Dockerfile', text:'''
-                    FROM nginx:alpine
-                    COPY build /usr/share/nginx/html
+                    FROM python:alpine  
+                    WORKDIR /app
+                    COPY . /app
+                    RUN pip install --no-cache-dir -r requirements.txt
                     '''
 
-                    sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER}"
+                    sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
                 }
             }
         }
