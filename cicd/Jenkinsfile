@@ -11,6 +11,7 @@ pipeline{
     stages{
         stage('Clonar Repositorio'){
             steps{
+                sh "echo Clonando repo"
                 git branch: "${env.GIT_BRANCH}", url:"${env.GIT_REPO}"
             }
         }
