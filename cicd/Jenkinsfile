@@ -22,7 +22,7 @@ pipeline{
                     FROM python:alpine  
                     WORKDIR /app
                     COPY . /app
-                    RUN pip install --no-cache-dir -r requirements.txt
+                    RUN pip install --no-cache-dir -r requierements.txt
                     '''
 
                     sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
