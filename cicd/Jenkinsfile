@@ -25,7 +25,7 @@ pipeline{
                     RUN pip install --no-cache-dir -r requirements.txt
                     '''
 
-                    sh "sudo docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
+                    sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
                 }
             }
         }
