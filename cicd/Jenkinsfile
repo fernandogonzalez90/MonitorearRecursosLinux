@@ -26,7 +26,7 @@ pipeline{
                     RUN pip install --no-cache-dir -r requirements.txt
                     '''
 
-                    sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
+                    sh "sudo docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
                 }
             }
         }
@@ -35,7 +35,7 @@ pipeline{
             steps{
                 script{
                     docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_CREDENTIALS_ID){
-                        sh "docker push ${env.IMAGE_NAME}:${BUILD_NUMBER}"
+                        sh "sudo docker push ${env.IMAGE_NAME}:${BUILD_NUMBER}"
                     }
                 }
             }
