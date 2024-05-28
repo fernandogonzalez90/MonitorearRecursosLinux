@@ -41,18 +41,18 @@ pipeline{
         // }
     }
 
-    post{
-    always {
-        echo "Limpiando"
-        sh "sudo docker system prune -f"
-    }
-    success {
-        echo "Success !"
-    }
+//     post{
+//     always {
+//         echo "Limpiando"
+//         sh "sudo docker system prune -f"
+//     }
+//     success {
+//         echo "Success !"
+//     }
 
-    failure {
-        echo "Fail !"
-    }
-}
+//     failure {
+//         echo "Fail !"
+//     }
+// }
 }
 
