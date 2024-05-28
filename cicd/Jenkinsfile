@@ -1,12 +1,12 @@
 pipeline{
     agent any
 
-    // environment {
-    //     DOCKER_CREDENTIALS_ID = credentials("dockerhub")
-    //     IMAGE_NAME = 'firthunands90/montinorearrecursoslinux'
-    //     GIT_REPO = 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
-    //     GIT_BRANCH = 'main'
-    // }
+    environment {
+        DOCKER_CREDENTIALS_ID = credentials("dockerhub")
+        IMAGE_NAME = 'firthunands90/montinorearrecursoslinux'
+        GIT_REPO = 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
+        GIT_BRANCH = 'main'
+    }
 
     stages{
         stage('Clonar Repositorio'){
@@ -15,20 +15,20 @@ pipeline{
             }
         }
 
-        // stage('Build Docker Image'){
-        //     steps{
-        //         script {
-        //             writeFile file: 'Dockerfile', text:'''
-        //             FROM python:alpine  
-        //             WORKDIR /app
-        //             COPY . /app
-        //             RUN pip install --no-cache-dir -r requirements.txt
-        //             '''
+        stage('Build Docker Image'){
+            steps{
+                script {
+                    writeFile file: 'Dockerfile', text:'''
+                    FROM python:alpine  
+                    WORKDIR /app
+                    COPY . /app
+                    RUN pip install --no-cache-dir -r requirements.txt
+                    '''
 
-        //             sh "sudo docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
-        //         }
-        //     }
-        // }
+                    sh "sudo docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
+                }
+            }
+        }
         
         // stage('Push Docker Image'){
         //     steps{
