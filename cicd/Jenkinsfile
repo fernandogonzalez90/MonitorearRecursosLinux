@@ -4,15 +4,15 @@ pipeline{
     environment {
         DOCKER_CREDENTIALS_ID = credentials("dockerhub")
         IMAGE_NAME = 'firthunands90/montinorearrecursoslinux'
-        GIT_REPO = 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
-        GIT_BRANCH = 'main'
+        // GIT_REPO = 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
+        // GIT_BRANCH = 'main'
     }
 
     stages{
         stage('Clonar Repositorio'){
             steps{
                 sh "echo Clonando repo"
-                git branch: "${env.GIT_BRANCH}", url:"${env.GIT_REPO}"
+                git branch: "main", url:"https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git"
             }
         }
 
