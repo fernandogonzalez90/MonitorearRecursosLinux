@@ -22,7 +22,7 @@ pipeline{
 
         stage('Build Docker Image'){
             steps{
-                sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} App/dockerfile"
+                sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} App/"
                 sh "docker run -d -p 8000:8000 ${env.IMAGE_NAME}:${BUILD_NUMBER}"
             }
         }
