@@ -11,6 +11,7 @@ fi
 IMAGE_ID=$(docker inspect --format='{{.Image}}' $CONTAINER_ID)
 
 if [ -z "$IMAGE_ID" ]; then
+    echo "No se pudo obtener el ID de la imagen asociada al contenedor $CONTAINER_ID."
 fi
 
 # Detener y eliminar el contenedor
