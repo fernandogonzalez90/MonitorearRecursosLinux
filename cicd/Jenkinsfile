@@ -11,26 +11,21 @@ pipeline{
     stages{
         stage('Clonar Repositorio'){
             steps{
-                git branch: 'main', url: 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
+                git branch: ${GIT_BRANCH}, url: ${GIT_REPO}
+            }
+        }
+
+        stage{
+            steps{
+                sh"chmod +x ./limpieza.sh"
+                sh"./limpieza.sh"
             }
         }
 
         stage('Build Docker Image'){
             steps{
-                script {
-                    writeFile file: 'Dockerfile', text:'''
-                    FROM python:3.10-alpine
-                    RUN mkdir /app
-                    WORKDIR /app
-                    COPY ../App .
-                    RUN apk add --no-cache gcc musl-dev python3-dev libffi-dev
-                    RUN pip install --upgrade pip
-                    RUN pip install -r requirements.txt
-                    CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
-                    '''
-                    sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
-                    sh "docker run -d -p 8000:8000 ${env.IMAGE_NAME}:${BUILD_NUMBER}"
-                }
+                sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} App/dockerfile"
+                sh "docker run -d -p 8000:8000 ${env.IMAGE_NAME}:${BUILD_NUMBER}"
             }
         }
         
