@@ -31,15 +31,15 @@ pipeline{
             }
         }
         
-        // stage('Push Docker Image'){
-        //     steps{
-        //         script{
-        //             docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_CREDENTIALS_ID){
-        //                 sh "sudo docker push ${env.IMAGE_NAME}:${BUILD_NUMBER}"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Push Docker Image'){
+            steps{
+                script{
+                    docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_CREDENTIALS_ID){
+                        sh "sudo docker push ${env.IMAGE_NAME}:${BUILD_NUMBER}"
+                    }
+                }
+            }
+        }
     }
 
 //     post{
