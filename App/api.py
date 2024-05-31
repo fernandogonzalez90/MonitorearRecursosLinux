@@ -15,16 +15,18 @@ class SystemInfo(BaseModel):
     disk_total: float
     disk_used_percent: float
 
-@app.get("/get_system_info")
-def get_system_info():
+@app.get("/")
+def root():
     try:
         # Obtener información del sistema
         if os.name == 'nt':  # Windows
             processor_info = platform.processor()
+            root_disk = os.environ['SystemDrive']  # Obtener la unidad del sistema (normalmente C:)
         else:  # Unix-like
             num_cores = psutil.cpu_count()
             cpu_usage = psutil.cpu_percent(interval=1, percpu=True)
             processor_info = f'{num_cores} cores     {cpu_usage}%'
+            root_disk = os.path.abspath(os.sep)  # Obtener la raíz del disco en sistemas Unix-like
 
         # Información de RAM
         ram_info = psutil.virtual_memory()
@@ -32,7 +34,7 @@ def get_system_info():
         ram_used_percent = round(ram_info.percent, 1)
 
         # Información del disco
-        disk_info = psutil.disk_usage('/')
+        disk_info = psutil.disk_usage(root_disk)
         disk_total_gb = round(disk_info.total / (1024 ** 3), 1)
         disk_used_percent = round(disk_info.percent, 1)
 
