@@ -25,7 +25,7 @@ pipeline{
                     RUN apk add --no-cache gcc musl-dev python3-dev libffi-dev
                     RUN pip install --no-cache-dir -r requierements.txt
                     '''
-
+                    sh "echo Compilando Docker"
                     sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
                 }
             }
