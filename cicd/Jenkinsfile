@@ -33,27 +33,27 @@ pipeline{
         
         stage('Push Docker Image'){
             steps{
-                script{
-                    docker.withRegistry('https://registry.hub.docker.com', env.DOCKER_CREDENTIALS_ID){
-                        sh "docker push ${env.IMAGE_NAME}:${BUILD_NUMBER}"
-                    }
+                    sh 'echo ${DOCKERHUB_CREDS_PSW} | docker login -u ${DOCKERHUB_CREDS_USR} --password-stdin'
+                    sh "docker tag ${env.IMAGE_NAME}:${BUILD_NUMBER} ${env.IMAGE_NAME}:${BUILD_NUMBER}"
                 }
             }
         }
+
+        post{
+            always {
+                echo "Limpiando"
+                sh "sudo docker system prune -f"
+            }
+            success {
+                echo "Success !"
+            }
+
+            failure {
+                echo "Fail !"
+            }
+        }
+
     }
 
-//     post{
-//     always {
-//         echo "Limpiando"
-//         sh "sudo docker system prune -f"
-//     }
-//     success {
-//         echo "Success !"
-//     }
-
-//     failure {
-//         echo "Fail !"
-//     }
-// }
-}
+    
 
