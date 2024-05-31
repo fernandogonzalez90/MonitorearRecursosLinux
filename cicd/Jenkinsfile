@@ -13,7 +13,7 @@ pipeline{
             }
         }
 
-        stage{
+        stage("Limpiando restos de contenedor e imagen anteriores"){
             steps{
                 sh"chmod +x ./limpieza.sh"
                 sh"./limpieza.sh"
