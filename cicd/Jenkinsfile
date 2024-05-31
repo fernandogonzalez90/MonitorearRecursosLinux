@@ -24,9 +24,12 @@ pipeline{
                     COPY . /app
                     RUN apk add --no-cache gcc musl-dev python3-dev libffi-dev
                     RUN pip install --no-cache-dir -r requierements.txt
+                    EXPOSE 8000
+                    CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
                     '''
                     sh "echo Compilando Docker"
                     sh "docker build -t ${env.IMAGE_NAME}:${BUILD_NUMBER} ."
+                    sh "docker run -d -p 8000:8000 ${env.IMAGE_NAME}:${BUILD_NUMBER}"
                 }
             }
         }
