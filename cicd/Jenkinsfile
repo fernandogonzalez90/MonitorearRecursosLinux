@@ -2,7 +2,7 @@ pipeline{
     agent any
 
     environment {
-        DOCKER_CREDENTIALS_ID = credentials("dockerhub")
+        DOCKERHUB_CREDS = credentials("dockerhub")
         IMAGE_NAME = 'firthunands90/montinorearrecursoslinux'
         GIT_REPO = 'https://github.com/fernandogonzalez90/MonitorearRecursosLinux.git'
         GIT_BRANCH = 'main'
